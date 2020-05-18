@@ -6,17 +6,13 @@ class Solution {
     }
     func hasGroupsSizeX(_ deck: [Int]) -> Bool {
         let numbers = deck.reduce(into: [Int:Int]()) { $0[$1] = ($0[$1] ?? 0) + 1 }.map { $0.value }
-        print(numbers)
         var x: Int = 0
         for n in numbers {
             x = gcd(x, n)
-            print("x = \(x)")
-            if x==1 { return false }
+            if x == 1 { return false }
         }
-        return x>=2
+        return x >= 2
     }
 }
 
-Solution().hasGroupsSizeX([1,1,1,1,2,2,3,3])
-
-Solution().gcd(20, 0)
+Solution().hasGroupsSizeX([1,1,1,2,2,2,3,3])
