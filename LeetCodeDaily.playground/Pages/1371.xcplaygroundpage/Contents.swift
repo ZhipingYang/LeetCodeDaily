@@ -39,18 +39,15 @@ import Foundation
 //class Solution {
 //    func findTheLongestSubstring(_ s: String) -> Int {
 //        let allC = s.map { String($0) }
-//        let cases = Set(arrayLiteral: "a","e","i","o","u")
-//        let count = allC.count
+//        let cases = ["a":0,"e":1,"i":2,"o":3,"u":4]
 //        var max = 0
-//        for i in 0..<count {
-//            var dic = [String:String]()
-//            for j in i..<count {
+//        for i in 0..<s.count {
+//            var state = 0x000000
+//            for j in i..<s.count {
 //                let str = allC[j]
-//                if cases.contains(str) {
-//                    dic[str] == nil ? (dic[str] = str) : (dic[str] = nil)
-//                }
+//                if cases.keys.contains(str) { state ^= 1<<(cases[str]!) }
 //                let currentLength = j - i + 1
-//                if dic.count == 0, max < currentLength {
+//                if state == 0, max < currentLength {
 //                    max = currentLength
 //                }
 //            }
@@ -59,25 +56,23 @@ import Foundation
 //    }
 //}
 
+
 class Solution {
     func findTheLongestSubstring(_ s: String) -> Int {
         let allC = s.map { String($0) }
         let cases = ["a":0,"e":1,"i":2,"o":3,"u":4]
-        let set = ["a","e","i","o","u"]
-        var max = 0
-
+        var dp = [0:-1]
+        var result = 0, state = 0
         for i in 0..<s.count {
-            var state = 0x0
-            for j in i..<s.count {
-                let str = allC[j]
-                if set.contains(str) { state ^= 1<<(cases[str]!) }
-                let currentLength = j - i + 1
-                if state == 0, max < currentLength {
-                    max = currentLength
-                }
+            let str = allC[i]
+            if cases.keys.contains(str) { state ^= (1<<(cases[str]!)) }
+            if let value = dp[state] {
+                result = max(result, i-value)
+            } else {
+                dp[state] = i
             }
         }
-        return max
+        return result
     }
 }
 
